@@ -1,4 +1,3 @@
-
 from flask import Flask, request, abort
 
 from linebot import (
@@ -8,19 +7,20 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage,
+    MessageEvent, TextMessage, TextSendMessage, SourceUser, VideoMessage, VideoSendMessage
 )
 import os
 import random
 
 app = Flask(__name__)
 
-#環境変数取得
+# 環境変数取得
 YOUR_CHANNEL_ACCESS_TOKEN = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
 YOUR_CHANNEL_SECRET = os.environ["YOUR_CHANNEL_SECRET"]
 
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(YOUR_CHANNEL_SECRET)
+
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -39,66 +39,80 @@ def callback():
 
     return 'OK'
 
+
 # ランダム返信用のリスト
-randomResList = [
-				 'いま大体売れてる本自分が作っているんで。',
-				 '絶対的成果主義ならランチは食べない。時間が惜しいからだ。お前らは家畜ではない。',
-				 '箕輪編集室は、圧倒的な実働部隊！',
-				 'モノをどう編集するか、キュレーションの時代。編集力はすべてに通ず。',
-				 '瞬間瞬間の思い付きを最速で形にしていく。',
-				 '箕輪編集室は何が生まれるかは分からないラボ的な場所。',
-				 '数は力。',
-				 '箕輪編集室はある人にとっては、常に動いているカオス。ある人にとっては、ゆるやかな安らぎの場所。',
-				 '各地方に拠点をつくりたい！！！地方の箕輪マフィア大募集！！！',
-				 '多動力とは死ぬほど何かを突き詰める力。',
-				 '失敗は最高のブランディング。失敗は高いハードルを超えようと思った時に起きるものだから。',
-				 'せっかく「意識高い系」なら、あとはひたすら手を動かし、己の名を上げろ！傍観者になるな実践者たれ。',
-				 '編集者とは才能のカクテルを飲める最高の仕事。',
-				 '「努力」は「夢中」に勝てない',
-				 '人脈を作るのは信頼を重ねるだけ。',
-				 '選択肢があったらやったことがないことをやる',
-				 '正しいことより楽しいことをしたい',
-				 '己の名を上げろ！時代を作れ！',
-				 '最初こそ、あえて高いところにいくべき',
-				 '願うだけのやつ、言うだけのやつ、やるやつ、やりきるやつ。人はこの4パターン。',
-				 'なんか仮想通貨とかカジノとかやってると月収分が瞬間で儲かったり失ったりして真面目に働くのがバカらしくなるけど、それでいいのだ。真面目に働くのがバカらしくなった後も、気がついたらやってしまっているものが本当の仕事だ。',
-				 '好きが勝つ'
-				 ]
+randomResList = []
+
+# random.txtから名言を読み込む
+with open('random.txt', 'r') as f:
+    # 一列ごとに読み込む
+    for line in f:
+        # 改行文字の削除
+        stripedLine = line.rstrip()
+        randomResList.append(stripedLine)
 
 # keyと一致する入力ならvalueを出力する用の辞書
 resDictionary = {
-"死ぬこと以外は":"かすり傷",
-"読書という":"荒野"
+    "死ぬこと以外は": "かすり傷",
+    "読書という": "荒野"
 }
 
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-	
-	targetKey = ""
-	
-	# 辞書に含まれるものは特定の言葉を返す
-	for key in resDictionary:
-		#		if event.message.text.find(key) != -1:
-		if event.message.text == key:
-			targetKey = key
-			break
+    targetKey = ""
+    # 辞書に含まれるものは特定の言葉を返す
+    for key, value in resDictionary.items():
+        #		if event.message.text.find(key) != -1:
+        if key in event.message.text and value not in event.message.text:
+            targetKey = key
+            break
 
-	if targetKey != "":
-		reply = resDictionary[targetKey]
-	else:
-		#　特定の単語が入っていなければリストからランダムで返信する
-		reply = random.choice(randomResList)
-			
-	# デバッグ用ログ出力
-	#	print(reply)
+    if targetKey != "":
+        reply = resDictionary[targetKey]
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=reply))
 
-	line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=reply))
+    elif '勝算' in event.message.text:
+        # user名を取得
+        if isinstance(event.source, SourceUser):
+            profile = line_bot_api.get_profile(event.source.user_id)
+            # user名
+            name = profile.display_name
+            reply = '{0}の勝算！'.format(name)
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text=reply))
+
+    elif '箕輪編集室' == event.message.text:
+        line_bot_api.reply_message(
+            event.reply_token,
+            [TextSendMessage(text='箕輪編集室はこちら'),
+             TextSendMessage(text='https://camp-fire.jp/projects/view/34264')])
+
+    elif 'ドークショ' in event.message.text or 'ドクショ' in event.message.text or 'コウヤ' in event.message.text:
+        messages = [TextSendMessage(text='ドークショドクショドークショ コウヤ（＾Ｏ＾）') for i in range(4)]
+        messages.append(TextSendMessage(text='ドークショドクショデジッセンダ（＾Ｏ＾）'))
+        line_bot_api.reply_message(
+            event.reply_token,
+            messages)
+    else:
+        # 　特定の単語が入っていなければリストからランダムで返信する
+        reply = random.choice(randomResList)
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=reply))
+
+        # デバッグ用ログ出力
+        #	print(reply)
+
+        # line_bot_api.reply_message(
+        #     event.reply_token,
+        #     TextSendMessage(text=reply))
 
 
 if __name__ == "__main__":
-#    app.run()
+    #    app.run()
     port = int(os.getenv("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
