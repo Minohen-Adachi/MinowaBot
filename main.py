@@ -28,7 +28,7 @@ def callback():
 	body = request.get_data(as_text=True)
 	app.logger.info("Request body: " + body)
     # handle webhook body
-    try:
+	try:
         handler.handle(body, signature)
     except InvalidSignatureError:
         abort(400)
@@ -43,9 +43,9 @@ with open('random.txt', 'r') as f:
 	print("=== open ===")
 
     # 一列ごとに読み込む
-    for line in f:
+	for line in f:
         # 改行文字の削除
-        stripedLine = line.rstrip()
+		stripedLine = line.rstrip()
         randomResList.append(stripedLine)
 
 # keyと一致する入力ならvalueを出力する用の辞書
