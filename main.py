@@ -21,19 +21,19 @@ handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 
 @app.route("/callback", methods=['POST'])
 def callback():
-    print("=== callback ===")
     # get X-Line-Signature header value
     signature = request.headers['X-Line-Signature']
-    print(signature)
+
     # get request body as text
     body = request.get_data(as_text=True)
     app.logger.info("Request body: " + body)
+
     # handle webhook body
     try:
         handler.handle(body, signature)
     except InvalidSignatureError:
-        print("=== InvalidSignatureError ===")
         abort(400)
+
     return 'OK'
 
 
@@ -42,12 +42,11 @@ randomResList = []
 
 # random.txtから名言を読み込む
 with open('random.txt', 'r') as f:
-	print("=== open ===")
-	# 一列ごとに読み込む
-	for line in f:
-	    # 改行文字の削除
-	    stripedLine = line.rstrip()
-	    randomResList.append(stripedLine)
+    # 一列ごとに読み込む
+    for line in f:
+        # 改行文字の削除
+        stripedLine = line.rstrip()
+        randomResList.append(stripedLine)
 
 # keyと一致する入力ならvalueを出力する用の辞書
 resDictionary = {
@@ -59,10 +58,10 @@ resDictionary = {
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    print("=== handle_message START ===")
-    
-    # メッセージが送られてきたときの処理 
-    # 辞書に含まれるものは特定の言葉を返す 
+
+    # メッセージが送られてきたときの処理
+
+    # 辞書に含まれるものは特定の言葉を返す
     for key, value in resDictionary.items():
         # keyが含まれていてvalueが含まれていないとき
         if key in event.message.text and value not in event.message.text:
@@ -70,7 +69,7 @@ def handle_message(event):
                 event.reply_token,
                 TextSendMessage(text=value))
             break
-    
+
     # 勝算というフレーズが入っていたとき
     if '勝算' in event.message.text:
         # user名を取得
@@ -161,7 +160,7 @@ def handle_message(event):
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=reply))
-    print("=== handle_message  END ===")
+
 
 if __name__ == "__main__":
     # app.run()
