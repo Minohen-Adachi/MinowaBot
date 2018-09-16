@@ -21,9 +21,11 @@ handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 
 @app.route("/callback", methods=['POST'])
 def callback():
+	print("=== callback ===")
+		
     # get X-Line-Signature header value
     signature = request.headers['X-Line-Signature']
-
+	
     # get request body as text
     body = request.get_data(as_text=True)
     app.logger.info("Request body: " + body)
@@ -42,6 +44,8 @@ randomResList = []
 
 # random.txtから名言を読み込む
 with open('random.txt', 'r') as f:
+	print("=== open ===")
+
     # 一列ごとに読み込む
     for line in f:
         # 改行文字の削除
@@ -58,6 +62,7 @@ resDictionary = {
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+	print("=== handle_message ===")
 
     # メッセージが送られてきたときの処理
 
