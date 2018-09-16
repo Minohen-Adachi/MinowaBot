@@ -41,7 +41,6 @@ randomResList = []
 # random.txtから名言を読み込む
 with open('random.txt', 'r') as f:
 	print("=== open ===")
-	
 	# 一列ごとに読み込む
 	for line in f:
 	    # 改行文字の削除
@@ -58,7 +57,8 @@ resDictionary = {
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    print("=== handle_message ===")
+    print("=== handle_message START ===")
+    
     # メッセージが送られてきたときの処理 
     # 辞書に含まれるものは特定の言葉を返す 
     for key, value in resDictionary.items():
@@ -159,7 +159,7 @@ def handle_message(event):
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=reply))
-
+    print("=== handle_message  END ===")
 
 if __name__ == "__main__":
     # app.run()
