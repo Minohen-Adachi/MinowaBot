@@ -60,8 +60,8 @@ resDictionary = {
 def handle_message(event):
 	print("=== handle_message ===")
 	
-    # メッセージが送られてきたときの処理
-    # 辞書に含まれるものは特定の言葉を返す
+    # メッセージが送られてきたときの処理 
+    # 辞書に含まれるものは特定の言葉を返す 
     for key, value in resDictionary.items():
         # keyが含まれていてvalueが含まれていないとき
         if key in event.message.text and value not in event.message.text:
