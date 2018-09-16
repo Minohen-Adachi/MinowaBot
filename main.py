@@ -70,7 +70,7 @@ def handle_message(event):
                 event.reply_token,
                 TextSendMessage(text=value))
             break
-
+    
     # 勝算というフレーズが入っていたとき
     if '勝算' in event.message.text:
         # user名を取得
