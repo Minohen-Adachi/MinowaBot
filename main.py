@@ -59,9 +59,8 @@ resDictionary = {
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
 	print("=== handle_message ===")
-
+	
     # メッセージが送られてきたときの処理
-
     # 辞書に含まれるものは特定の言葉を返す
     for key, value in resDictionary.items():
         # keyが含まれていてvalueが含まれていないとき
