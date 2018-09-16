@@ -31,6 +31,7 @@ def callback():
     try:
         handler.handle(body, signature)
     except InvalidSignatureError:
+        print("=== InvalidSignatureError ===")
         abort(400)
     return 'OK'
 
