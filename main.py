@@ -41,12 +41,12 @@ randomResList = []
 # random.txtから名言を読み込む
 with open('random.txt', 'r') as f:
 	print("=== open ===")
-
-    # 一列ごとに読み込む
-    for line in f:
-        # 改行文字の削除
-        stripedLine = line.rstrip()
-        randomResList.append(stripedLine)
+	
+	# 一列ごとに読み込む
+	for line in f:
+	    # 改行文字の削除
+	    stripedLine = line.rstrip()
+	    randomResList.append(stripedLine)
 
 # keyと一致する入力ならvalueを出力する用の辞書
 resDictionary = {
