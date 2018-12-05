@@ -172,9 +172,12 @@ def handle_message(event):
 
     # noteの#箕輪編集室の人気記事の情報を返却
     elif 'note' == event.message.text:
+        print('===== 1 =====')
 
         from selenium.webdriver.chrome.options import Options
         options = Options()
+        
+        print('===== 2 =====')
         # Heroku以外ではNone
         # if chrome_binary_path: options.binary_location = chrome_binary_path
         options.binary_location = chrome_binary_location
@@ -185,7 +188,12 @@ def handle_message(event):
         
         driver.set_window_size(800, 600)  # ウィンドウサイズを設定する。
 
+        print('===== 3 =====')
+        
         navigate(driver)  # noteのトップページに遷移する。
+        
+        print('===== 4 =====')
+        
         posts = scrape_posts(driver)  # 文章コンテンツのリストを取得する。
 
         print('出力開始ログ')
