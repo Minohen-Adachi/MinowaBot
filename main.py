@@ -203,7 +203,7 @@ def handle_message(event):
 
         print('出力開始LINE')
 
-        # コンテンツの情報を表示する。
+        # コンテンツの情報を表示する。 
         for post in posts:
             line_bot_api.reply_message(
                 event.reply_token, 
