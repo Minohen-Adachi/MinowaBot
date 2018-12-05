@@ -1,19 +1,28 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import os
 import random
-
+import sys
+import urllib.request
 import requests
+
 from bs4 import BeautifulSoup
 from flask import Flask, abort, request
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import (MessageEvent, SourceUser, TextMessage,
                             TextSendMessage, VideoMessage, VideoSendMessage)
+from selenium import webdriver
+from urllib.parse import urlparse
 
 app = Flask(__name__)
 
-# 環境変数取得
+# 環境変数取得 
 YOUR_CHANNEL_ACCESS_TOKEN = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
 YOUR_CHANNEL_SECRET = os.environ["YOUR_CHANNEL_SECRET"]
+driver_path = os.environ["CHROME_DRIVER_PATH"]
+chrome_binary_location = os.environ["CHROME_BINARY_LOCATION"]
 
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(YOUR_CHANNEL_SECRET)
@@ -35,6 +44,41 @@ def callback():
         abort(400)
 
     return 'OK'
+
+def navigate(driver):
+    print('Navigating...')
+
+    url = 'https://note.mu/hashtag/箕輪編集室?f=popular'
+    p = urlparse(url)
+    query = urllib.parse.quote_plus(p.query, safe='=&')
+    url = '{}://{}{}{}{}{}{}{}{}'.format(
+        p.scheme, p.netloc, p.path,
+        ';' if p.params else '', p.params,
+        '?' if p.query else '', query,
+        '#' if p.fragment else '', p.fragment)
+
+    driver.get(url)  # noteのトップページを開く。
+    assert 'note' in driver.title  # タイトルに'note'が含まれていることを確認する。
+    print(driver.title)
+
+def scrape_posts(driver):
+    print('Scraping start...')
+
+    posts = []
+
+    # すべての文章コンテンツを表すh3要素について反復する。
+    for h3 in driver.find_elements_by_xpath("//h3[@class='renewal-p-cardItem__title']"):
+        # URL、タイトル、を取得して、dictとしてリストに追加する。
+        posts.append({
+            'title': h3.find_element_by_css_selector('a').text,
+            'url': h3.find_element_by_css_selector('a').get_attribute('href'),
+        })
+        print(h3.find_element_by_css_selector('a').text)
+        print(h3.find_element_by_css_selector('a').get_attribute('href'))
+
+    print('Scraping end...')
+    
+    return posts
 
 
 # ランダム返信用のリスト
@@ -126,23 +170,38 @@ def handle_message(event):
                         text='現在{0}です。{1}人空きがあります。' .format(
                             numOfMember, num))])
 
-    # 箕輪編集室の情報を返却
-    elif '箕輪大陸' == event.message.text:
-        r = requests.get("https://camp-fire.jp/projects/view/83596")
-        soup = BeautifulSoup(r.content, "html.parser")
-        # 箕輪大陸の支援総額
-        sum = soup.select("strong.number")[0].getText()
-        n_str = sum.replace('円', '').replace(',', '')
-        achievementRate = int(n_str) * 100 / 3000000
-        achievementRate = int(achievementRate)
+    # noteの#箕輪編集室の人気記事の情報を返却
+    elif 'note' == event.message.text:
 
-        line_bot_api.reply_message(
-            event.reply_token, [
-                TextSendMessage(
-                    text='箕輪大陸はこちら。'), TextSendMessage(
-                    text='https://camp-fire.jp/projects/view/83596'), TextSendMessage(
-                    text='現在の支援総額は、{0}です。達成率は、{1}%です。' .format(
-                        sum, achievementRate))])
+        from selenium.webdriver.chrome.options import Options
+        options = Options()
+        # Heroku以外ではNone
+        # if chrome_binary_path: options.binary_location = chrome_binary_path
+        options.binary_location = chrome_binary_location
+        options.add_argument('--headless')
+        
+        driver = webdriver.Chrome(executable_path=driver_path, options=options)
+        # driver = webdriver.Chrome(options=options)
+        
+        driver.set_window_size(800, 600)  # ウィンドウサイズを設定する。
+
+        navigate(driver)  # noteのトップページに遷移する。
+        posts = scrape_posts(driver)  # 文章コンテンツのリストを取得する。
+
+        print('出力開始ログ')
+
+        for post in posts:
+            print(post)
+
+        print('出力開始LINE')
+
+        # コンテンツの情報を表示する。
+        for post in posts:
+            line_bot_api.reply_message(
+                event.reply_token, 
+                    TextSendMessage(
+                        text=post))
+
 
     elif 'ドークショ' in event.message.text or 'ドクショ' in event.message.text or\
             'コウヤ' in event.message.text:
