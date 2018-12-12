@@ -15,6 +15,7 @@ from linebot.models import (MessageEvent, SourceUser, TextMessage,
                             TextSendMessage, VideoMessage, VideoSendMessage)
 from selenium import webdriver
 from urllib.parse import urlparse
+from time import sleep
 
 app = Flask(__name__)
 
