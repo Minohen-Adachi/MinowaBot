@@ -192,6 +192,8 @@ def handle_message(event):
         
         navigate(driver)  # noteのトップページに遷移する。
         
+        sleep(1)
+        
         print('===== 4 =====')
         
         posts = scrape_posts(driver)  # 文章コンテンツのリストを取得する。
