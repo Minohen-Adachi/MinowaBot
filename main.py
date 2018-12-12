@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import os
 import random
 import sys
@@ -16,7 +19,7 @@ from time import sleep
 
 app = Flask(__name__)
 
-# 環境変数取得
+# 環境変数取得 
 YOUR_CHANNEL_ACCESS_TOKEN = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
 YOUR_CHANNEL_SECRET = os.environ["YOUR_CHANNEL_SECRET"]
 driver_path = os.environ["CHROME_DRIVER_PATH"]
@@ -56,6 +59,8 @@ def navigate(driver):
         '#' if p.fragment else '', p.fragment)
 
     driver.get(url)  # noteのトップページを開く。
+    sleep(10)
+    
     assert 'note' in driver.title  # タイトルに'note'が含まれていることを確認する。
     print(driver.title)
 
@@ -170,9 +175,12 @@ def handle_message(event):
 
     # noteの#箕輪編集室の人気記事の情報を返却
     elif 'note' == event.message.text:
+        print('===== 1 =====')
 
         from selenium.webdriver.chrome.options import Options
         options = Options()
+        
+        print('===== 2 =====')
         # Heroku以外ではNone
         # if chrome_binary_path: options.binary_location = chrome_binary_path
         options.binary_location = chrome_binary_location
@@ -183,8 +191,14 @@ def handle_message(event):
         
         driver.set_window_size(800, 600)  # ウィンドウサイズを設定する。
 
+        print('===== 3 =====')
+        
         navigate(driver)  # noteのトップページに遷移する。
+        
         sleep(1)
+        
+        print('===== 4 =====')
+        
         posts = scrape_posts(driver)  # 文章コンテンツのリストを取得する。
 
         print('出力開始ログ')
@@ -194,7 +208,7 @@ def handle_message(event):
 
         print('出力開始LINE')
 
-        # コンテンツの情報を表示する。
+        # コンテンツの情報を表示する。 
         for post in posts:
             line_bot_api.reply_message(
                 event.reply_token, 
