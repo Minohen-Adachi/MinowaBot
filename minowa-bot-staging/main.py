@@ -15,6 +15,7 @@ from linebot.models import (MessageEvent, SourceUser, TextMessage,
                             TextSendMessage, VideoMessage, VideoSendMessage)
 from selenium import webdriver
 from urllib.parse import urlparse
+from time import sleep
 
 app = Flask(__name__)
 
@@ -58,6 +59,8 @@ def navigate(driver):
         '#' if p.fragment else '', p.fragment)
 
     driver.get(url)  # noteのトップページを開く。
+    sleep(1)
+    
     assert 'note' in driver.title  # タイトルに'note'が含まれていることを確認する。
     print(driver.title)
 
@@ -191,6 +194,8 @@ def handle_message(event):
         print('===== 3 =====')
         
         navigate(driver)  # noteのトップページに遷移する。
+        
+        sleep(1)
         
         print('===== 4 =====')
         
