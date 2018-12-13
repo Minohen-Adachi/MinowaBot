@@ -206,13 +206,14 @@ def handle_message(event):
         #    post_messages.append(TextSendMessage(text = post))
         #    post_messages.append(post)
 
-        line_bot_api.reply_message(
-            event.reply_token,
-                TextSendMessage(text = posts[0])
+        for post in posts:
+            line_bot_api.reply_message(
+                event.reply_token,
+                    TextSendMessage(text = post)
 #                TextSendMessage(text = post[1]),
 #               TextSendMessage(text = post[2]),
 #                TextSendMessage(text = post[3]),
-                )
+                    )
         #    post_messages)
         #              TextSendMessage(
         #                text = post_messages))
