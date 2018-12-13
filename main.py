@@ -202,6 +202,8 @@ def handle_message(event):
         
         for post in posts:
             rep.append(TextSendMessage(text = post))
+            print(TextSendMessage(text = post))
+            print(rep)
         
         print(rep)
         
