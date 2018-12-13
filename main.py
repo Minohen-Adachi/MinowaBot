@@ -200,8 +200,11 @@ def handle_message(event):
 
         rep = [TextSendMessage(text = 'おすすめnote')]
         
-        for post in posts:
-            rep.append(TextSendMessage(text = post))        
+#         for post in posts:
+#             rep.append(TextSendMessage(text = post)) 
+            
+        for i in range(2):
+            post_messages.append(TextSendMessage(text = post[0]))
         print(rep)
         
         line_bot_api.reply_message(
