@@ -201,14 +201,21 @@ def handle_message(event):
         print('出力開始LINE')
 
         # コンテンツの情報を表示する。
-        post_messages = []
-        for i in range(4):
-            post_messages.append(TextSendMessage(text = post))
-            post_messages.append(post)
+        # post_messages = []
+        # for post in posts:
+        #    post_messages.append(TextSendMessage(text = post))
+        #    post_messages.append(post)
 
         line_bot_api.reply_message(
             event.reply_token,
-            post_messages)
+                TextSendMessage(text = posts[0]),
+#                TextSendMessage(text = post[1]),
+#               TextSendMessage(text = post[2]),
+#                TextSendMessage(text = post[3]),
+                )
+        #    post_messages)
+        #              TextSendMessage(
+        #                text = post_messages))
 
 
     elif 'ドークショ' in event.message.text or 'ドクショ' in event.message.text or\
