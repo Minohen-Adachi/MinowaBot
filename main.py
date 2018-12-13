@@ -200,7 +200,7 @@ def handle_message(event):
 
         rep = [TextSendMessage(text = 'おすすめnote')]
                    
-        for post in rep:
+        for post in posts:
             rep.append(TextSendMessage(text=post))
         print(rep)
         
