@@ -204,7 +204,7 @@ def handle_message(event):
 #             rep.append(TextSendMessage(text = post)) 
             
         for i in range(2):
-            post_messages.append(TextSendMessage(text = post[0]))
+            rep.append(TextSendMessage(text = post[0]))
         print(rep)
         
         line_bot_api.reply_message(
