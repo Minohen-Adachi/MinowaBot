@@ -198,7 +198,7 @@ def handle_message(event):
             print(post)
         print('=====出力開始LINE=====')
 
-        rep = []
+        rep = [TextSendMessage(text = 'おすすめnote')]
         
         for post in posts:
             rep.append(TextSendMessage(text = post))
