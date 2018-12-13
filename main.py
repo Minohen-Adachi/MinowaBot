@@ -208,7 +208,7 @@ def handle_message(event):
 
         line_bot_api.reply_message(
             event.reply_token,
-                TextSendMessage(text = posts[0]),
+                TextSendMessage(text = posts[0])
 #                TextSendMessage(text = post[1]),
 #               TextSendMessage(text = post[2]),
 #                TextSendMessage(text = post[3]),
