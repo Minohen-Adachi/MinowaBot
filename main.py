@@ -193,24 +193,18 @@ def handle_message(event):
         navigate(driver)  # noteのトップページに遷移する。
         posts = scrape_posts(driver)  # 文章コンテンツのリストを取得する。
 
-        print('出力開始ログ')
-
+        print('=====出力開始ログ=====')
         for post in posts:
             print(post)
-
-        print('出力開始LINE')
-
-        # コンテンツの情報を表示する。
-        # post_messages = []
-        # for post in posts:
-        #    post_messages.append(TextSendMessage(text = post))
-        #    post_messages.append(post)
+        print('=====出力開始LINE=====')
 
         rep = []
         
         for post in posts:
             rep.append(TextSendMessage(text = post))
-            
+        
+        print(rep)
+        
         line_bot_api.reply_message(
             event.reply_token, rep)
 
