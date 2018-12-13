@@ -56,7 +56,7 @@ def navigate(driver):
         '#' if p.fragment else '', p.fragment)
 
     driver.get(url)  # noteのトップページを開く。
-    time.sleep(10)
+    time.sleep(5)
     assert 'note' in driver.title  # タイトルに'note'が含まれていることを確認する。
     print(driver.title)
 
@@ -201,10 +201,7 @@ def handle_message(event):
         rep = [TextSendMessage(text = 'おすすめnote')]
         
         for post in posts:
-            rep.append(TextSendMessage(text = post))
-            print(TextSendMessage(text = post))
-            print(rep)
-        
+            rep.append(TextSendMessage(text = post))        
         print(rep)
         
         line_bot_api.reply_message(
