@@ -209,14 +209,8 @@ def handle_message(event):
         for post in posts:
             line_bot_api.reply_message(
                 event.reply_token,
-                    TextSendMessage(text = post)
-#                TextSendMessage(text = post[1]),
-#               TextSendMessage(text = post[2]),
-#                TextSendMessage(text = post[3]),
-                    )
-        #    post_messages)
-        #              TextSendMessage(
-        #                text = post_messages))
+                    TextSendMessage(text = post))
+            sleep(1)
 
 
     elif 'ドークショ' in event.message.text or 'ドクショ' in event.message.text or\
