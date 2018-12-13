@@ -160,20 +160,18 @@ def handle_message(event):
                 num += int(n)
         if num == 0:
             line_bot_api.reply_message(
-                event.reply_token, [
-                    TextSendMessage(
-                        text='箕輪編集室はこちら。'), TextSendMessage(
-                        text='https://camp-fire.jp/projects/view/34264'), TextSendMessage(
-                        text='現在{0}です。満員御礼！' .format(
-                            numOfMember, num))])
+                event.reply_token, 
+                [TextSendMessage(text='箕輪編集室はこちら。'),
+                TextSendMessage(text='https://camp-fire.jp/projects/view/34264'),
+                TextSendMessage(text='現在{0}です。満員御礼！' .format(numOfMember, num))]
+                )
         else:
             line_bot_api.reply_message(
                 event.reply_token, [
-                    TextSendMessage(
-                        text='箕輪編集室はこちら。'), TextSendMessage(
-                        text='https://camp-fire.jp/projects/view/34264'), TextSendMessage(
-                        text='現在{0}です。{1}人空きがあります。' .format(
-                            numOfMember, num))])
+                    TextSendMessage(text='箕輪編集室はこちら。'),
+                    TextSendMessage(text='https://camp-fire.jp/projects/view/34264'),
+                    TextSendMessage(text='現在{0}です。{1}人空きがあります。' .format(numOfMember, num))]
+                    )
 
     # noteの#箕輪編集室の人気記事の情報を返却
     elif 'note' == event.message.text:
@@ -193,15 +191,15 @@ def handle_message(event):
         navigate(driver)  # noteのトップページに遷移する。
         posts = scrape_posts(driver)  # 文章コンテンツのリストを取得する。
 
-        print('=====出力開始ログ=====')
-        for post in posts:
-            print(post)
-        print('=====出力開始LINE=====')
+#         print('=====出力開始ログ=====')
+#         for post in posts:
+#             print(post)
+#         print('=====出力開始LINE=====')
 
-        rep = [TextSendMessage(text = 'おすすめnote')]
+        rep = ['おすすめnote']
                    
         for post in posts:
-            rep.append(TextSendMessage(text=post))
+            rep.append(post)
         print(rep)
         
         line_bot_api.reply_message(
