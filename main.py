@@ -191,11 +191,6 @@ def handle_message(event):
         navigate(driver)  # noteのトップページに遷移する。
         posts = scrape_posts(driver)  # 文章コンテンツのリストを取得する。
 
-#         print('=====出力開始ログ=====')
-#         for post in posts:
-#             print(post)
-#         print('=====出力開始LINE=====')
-
         rep = ['おすすめnote']
                    
         for post in posts:
@@ -211,6 +206,8 @@ def handle_message(event):
             TextSendMessage(
                 text='ドークショドクショドークショ コウヤ（＾Ｏ＾）') for i in range(4)]
         messages.append(TextSendMessage(text='ドークショドクショデジッセンダ（＾Ｏ＾）'))
+        
+        print(messages)
         line_bot_api.reply_message(
             event.reply_token,
             messages)
