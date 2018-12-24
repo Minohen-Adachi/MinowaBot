@@ -19,8 +19,9 @@ def main():
 
     # コンテンツの情報を表示する。
     for post in posts:
-        print("test")
         print(post)
+
+    return posts
 
 
 def navigate(driver):
@@ -40,8 +41,6 @@ def scrape_posts(driver):
     文章コンテンツのURL、タイトル、概要を含むdictのリストを取得する。
     """
     posts = []
-
-    print(driver)
 
     # すべての文章コンテンツを表すa要素について反復する。
     for h3 in driver.find_elements_by_xpath("//h3[@class='renewal-p-cardItem__title']"):
