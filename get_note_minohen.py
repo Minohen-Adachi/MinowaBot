@@ -29,7 +29,8 @@ def navigate(driver):
     目的のページに遷移する。
     """
     #    print('Navigating...', file=sys.stderr)
-    driver.get('https://note.mu/hashtag/箕輪編集室?f=popular')  # noteのトップページを開く。
+    # driver.get('https://note.mu/hashtag/箕輪編集室?f=popular')  # noteのトップページを開く。
+    driver.get('https://note.mu/search?context=note&q=箕輪編集室・公式&mode=search')  # noteのトップページを開く。
 
     sleep(1)
 
