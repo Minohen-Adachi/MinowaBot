@@ -160,18 +160,20 @@ def handle_message(event):
                 num += int(n)
         if num == 0:
             line_bot_api.reply_message(
-                event.reply_token, 
-                [TextSendMessage(text='箕輪編集室はこちら。'),
-                TextSendMessage(text='https://camp-fire.jp/projects/view/34264'),
-                TextSendMessage(text='現在{0}です。満員御礼！' .format(numOfMember, num))]
-                )
+                event.reply_token, [
+                    TextSendMessage(
+                        text='箕輪編集室はこちら。'), TextSendMessage(
+                        text='https://camp-fire.jp/projects/view/34264'), TextSendMessage(
+                        text='現在{0}です。満員御礼！' .format(
+                            numOfMember, num))])
         else:
             line_bot_api.reply_message(
                 event.reply_token, [
-                    TextSendMessage(text='箕輪編集室はこちら。'),
-                    TextSendMessage(text='https://camp-fire.jp/projects/view/34264'),
-                    TextSendMessage(text='現在{0}です。{1}人空きがあります。' .format(numOfMember, num))]
-                    )
+                    TextSendMessage(
+                        text='箕輪編集室はこちら。'), TextSendMessage(
+                        text='https://camp-fire.jp/projects/view/34264'), TextSendMessage(
+                        text='現在{0}です。{1}人空きがあります。' .format(
+                            numOfMember, num))])
 
     # noteの#箕輪編集室の人気記事の情報を返却
     elif 'note' == event.message.text:
@@ -191,14 +193,36 @@ def handle_message(event):
         navigate(driver)  # noteのトップページに遷移する。
         posts = scrape_posts(driver)  # 文章コンテンツのリストを取得する。
 
-        rep = ['おすすめnote']
-                   
+        print('出力開始ログ')
+
         for post in posts:
-            rep.append(post)
-        print(rep)
-        
+            print(post)
+
+        print('出力開始LINE')
+
+        # コンテンツの情報を表示する。
+        post_messages = []
+        # for i in range(4):
+        i = 0
+        for post in posts:
+            post_messages.append(TextSendMessage(text = post))
+#            post_messages.append(post)
+            i = i + 1
+            if i == 5:
+                break
+            
+
         line_bot_api.reply_message(
-            event.reply_token, rep)
+            event.reply_token,
+        #        TextSendMessage(text = posts[0]),
+#                TextSendMessage(text = post[1]),
+#               TextSendMessage(text = post[2]),
+#                TextSendMessage(text = post[3]),
+        #        )
+            post_messages)
+        #              TextSendMessage(
+        #                text = post_messages))
+
 
     elif 'ドークショ' in event.message.text or 'ドクショ' in event.message.text or\
             'コウヤ' in event.message.text:
@@ -206,8 +230,6 @@ def handle_message(event):
             TextSendMessage(
                 text='ドークショドクショドークショ コウヤ（＾Ｏ＾）') for i in range(4)]
         messages.append(TextSendMessage(text='ドークショドクショデジッセンダ（＾Ｏ＾）'))
-        
-        print(messages)
         line_bot_api.reply_message(
             event.reply_token,
             messages)
