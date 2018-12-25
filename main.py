@@ -46,7 +46,7 @@ def callback():
 def navigate(driver):
     print('Navigating...')
 
-    url = 'https://note.mu/hashtag/箕輪編集室?f=popular'
+    url = 'https://note.mu/search?context=note&q=minohen.com&sort=popular&mode=search'
     p = urlparse(url)
     query = urllib.parse.quote_plus(p.query, safe='=&')
     url = '{}://{}{}{}{}{}{}{}{}'.format(
@@ -66,7 +66,7 @@ def scrape_posts(driver):
     posts = []
 
     # すべての文章コンテンツを表すh3要素について反復する。
-    for h3 in driver.find_elements_by_xpath("//h3[@class='renewal-p-cardItem__title']"):
+    for h3 in driver.find_elements_by_xpath("//h3[@class='p-cardItem__title']"):
         # URL、タイトル、を取得して、dictとしてリストに追加する。
         # posts.append(
         #     h3.find_element_by_css_selector('a').text,
