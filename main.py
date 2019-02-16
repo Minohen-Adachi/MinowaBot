@@ -67,20 +67,10 @@ def scrape_posts(driver):
 
     # すべての文章コンテンツを表すh3要素について反復する。
     for h3 in driver.find_elements_by_xpath("//h3[@class='p-cardItem__title']"):
-        # URL、タイトル、を取得して、dictとしてリストに追加する。
-        # posts.append(
-        #     h3.find_element_by_css_selector('a').text,
-        #     h3.find_element_by_css_selector('a').get_attribute('href'),
-        # )
-        # posts.append(
-        #     h3.find_element_by_css_selector('a').text,
-        # )
+
         posts.append(
             h3.find_element_by_css_selector('a').get_attribute('href'),
         )
-        # print(h3.find_element_by_css_selector('a').text)
-        # print(h3.find_element_by_css_selector('a').get_attribute('href'))
-
     print('Scraping end...')
     
     return posts
@@ -146,7 +136,7 @@ def handle_message(event):
                 TextSendMessage(text=reply))
 
     # 箕輪編集室の情報を返却
-    elif '箕輪編集室' == event.message.text:
+    elif '箕輪編集室' == event.message.text or 'みの編' == event.message.text:
         r = requests.get("https://camp-fire.jp/projects/view/34264")
         soup = BeautifulSoup(r.content, "html.parser")
         # 箕輪編集室の現在のパトロン数
@@ -214,15 +204,7 @@ def handle_message(event):
 
         line_bot_api.reply_message(
             event.reply_token,
-        #        TextSendMessage(text = posts[0]),
-#                TextSendMessage(text = post[1]),
-#               TextSendMessage(text = post[2]),
-#                TextSendMessage(text = post[3]),
-        #        )
             post_messages)
-        #              TextSendMessage(
-        #                text = post_messages))
-
 
     elif 'ドークショ' in event.message.text or 'ドクショ' in event.message.text or\
             'コウヤ' in event.message.text:
