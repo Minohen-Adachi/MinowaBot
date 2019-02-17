@@ -67,7 +67,6 @@ def scrape_posts(driver):
 
     # すべての文章コンテンツを表すh3要素について反復する。
     for h3 in driver.find_elements_by_xpath("//h3[@class='p-cardItem__title']"):
-
         posts.append(
             h3.find_element_by_css_selector('a').get_attribute('href'),
         )
@@ -200,7 +199,6 @@ def handle_message(event):
             i = i + 1
             if i == 5:
                 break
-            
 
         line_bot_api.reply_message(
             event.reply_token,
